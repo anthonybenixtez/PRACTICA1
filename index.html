@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Citas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Estilo adicional para el modal */
+        .modal.fade .modal-dialog {
+            transform: translateY(-50px);
+            transition: transform 0.3s ease-out;
+        }
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="appCitas" class="container mt-5">
+    <h1 class="text-center mb-4">Lista de Citas</h1>
+    <h2 class="text-center mb-4">Total de Citas: {{ citas.length }}</h2>
+
+    <!-- Formulario para añadir una nueva cita -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-5">
+            <input type="text" class="form-control mb-2" placeholder="Añadir cita" @keyup.enter="agregarCita" v-model="nuevaCita">
+        </div>
+        <div class="col-md-5">
+            <input type="text" class="form-control mb-2" placeholder="Añadir autor" @keyup.enter="agregarCita" v-model="nuevoAutor">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" @click="agregarCita"><i class="fas fa-plus"></i> Añadir</button>
+        </div>
+    </div>
+
+    <!-- Tabla que muestra las citas -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Cita</th>
+                    <th>Autor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="({ cita, autor }, index) in citas" :key="index">
+                    <td>{{ cita }}</td>
+                    <td>{{ autor }}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm mr-2" @click="abrirEditarModal(index)"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn btn-danger btn-sm" @click="borrarCita(index)"><i class="fas fa-trash"></i> Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para actualizar la cita -->
+    <div v-if="mostrarEditarModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Actualizar Cita</h5>
+                    <button type="button" class="close" @click="cerrarEditarModal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control mb-3" v-model="citaEditada.cita" placeholder="Editar cita" @keyup.enter="actualizarCita">
+                    <input type="text" class="form-control" v-model="citaEditada.autor" placeholder="Editar autor" @keyup.enter="actualizarCita">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="cerrarEditarModal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" @click="actualizarCita"><i class="fas fa-check"></i> Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
